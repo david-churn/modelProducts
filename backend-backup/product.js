@@ -19,12 +19,21 @@ const app = express();
 app.use(cors({corsOptions}));
 app.use(bodyParser.json());
 
-// connect to the database
+// connect to the database.
 let connection = mysql.createConnection(dbauth);
 
-// get the product list from the database
+// get an ordered list of the product lines.
+app.get('/productlines', cors(corsOptions), (request,response) => {
+  connection.query(`select productLine from productlines order by productLine`,
+    function(error, results,fields) {
+      if (error) throw error;
+      response.send(results);
+    });
+})
+
+// get the product information
 app.get('/products', cors(corsOptions), (request,response) => {
-  connection.query(`select productCode, productName, productLine, quantityInStock, buyPrice, MSRP from products`,
+  connection.query(`select productCode, productName, productLine, productScale, productVendor, productDescription, quantityInStock, buyPrice, MSRP from products`,
     function(error, results,fields) {
       if (error) throw error;
       response.send(results);
@@ -38,7 +47,7 @@ app.get('/product/:id', cors(corsOptions), (request,response) => {
     });
 })
 
-// Add a new product to the database
+// Add a new product
 app.post ('/addProduct', cors(corsOptions), (request,response) => {
   let insQuery = `insert into products (productCode, productName, productLine, productScale, productVendor, productDescription, quantityInStock, buyPrice, MSRP) values ('${request.body.productCode}','${request.body.productName}','${request.body.productLine}','${request.body.productScale}','${request.body.productVendor}','${request.body.productDescription}',${request.body.quantityInStock},${request.body.buyPrice},${request.body.MSRP})`;
   console.log(`insQuery=`, insQuery);
@@ -50,7 +59,7 @@ app.post ('/addProduct', cors(corsOptions), (request,response) => {
 })
 
 // Update all the columns for one product
-app.post ('/chgProduct/:id', cors(corsOptions), (request,response) => {
+app.put ('/chgProduct/:id', cors(corsOptions), (request,response) => {
   let updQuery = `update products set productName='${request.body.productName}', productLine='${request.body.productLine}',
   productScale='${request.body.productScale}',
   productVendor='${request.body.productVendor}',

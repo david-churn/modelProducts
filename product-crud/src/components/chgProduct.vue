@@ -1,26 +1,32 @@
 <template>
-  <div class="chgProduct">
+  <td class="chgProduct" colspan="7">
     <form>
       <fieldset>
         <legend>Change Product Information</legend>
-        <div>Code: {{ this.productcode }}
+        <div>Code: {{ product.productCode }}
           <button type="button" @click="delProduct">Delete</button>
         </div>
         <div>Name: <input v-model="product.productName"></div>
-        <div>Line: <input v-model="product.productLine"></div>
+        <div>Line:
+          <select v-model="product.productLine">
+            <option value="none" selected disabled></option>
+            <option v-for="aline in prodlines" :key="aline.productLine"
+            :v-bind:value="aline.productLine">{{ aline.productLine }}</option>
+          </select>
+        </div>
         <div>Scale: <input v-model="product.productScale"></div>
         <div>Vendor: <input v-model="product.productVendor"></div>
-        <div>Description: <input v-model="product.productDescription"></div>
+        <div>Description: <textarea v-model="product.productDescription"></textarea></div>
         <div>In Stock: <input v-model="product.quantityInStock" type="number" class="qty"></div>
-        <div>Purchase price: <input v-model="product.buyPrice" type="number" step=".01"></div>
-        <div>MSRP: <input v-model="product.MSRP" type="number" step=".01"></div>
+        <div>Purchase price: <input v-model="product.buyPrice" type="number" step=".01" class="qty"></div>
+        <div>MSRP: <input v-model="product.MSRP" type="number" step=".01" class="qty"></div>
         <div>
           <button type="button" @click="resetProduct">Cancel</button>
           <button type="button" @click="chgProduct">Save</button>
         </div>
       </fieldset>
     </form>
-  </div>
+  </td>
 </template>
 
 <script>
@@ -29,54 +35,56 @@ import axios from 'axios';
 export default {
   name: 'chgProduct',
   props: {
-    productcode: String
+    product : Object,
+    prodlines : Array,
   },
   data: function () {
     return {
       title: `Update Product`,
-      product : { },
       originalProduct : { },
     }
   },
   created() {
-    axios.get(`http://localhost:3000/product/${this.productcode}`)
-      .then( (response) => {
-        // console.log(response);
-        this.product = response.data[0];
-        this.originalProduct = {
-          productName : this.product.productName,
-          productLine : this.product.productLine,
-          productScale : this.product.productScale,
-          productVendor : this.product.productVendor,
-          productDescription : this.product.productDescription,
-          quantityInStock : this.product.quantityInStock,
-          buyPrice : this.product.buyPrice,
-          MSRP : this.product.MSRP };
-      })
-      .catch( (error) => {
-        console.log(error);
-      })
+    this.originalProduct = {
+      productName : this.product.productName,
+      productLine : this.product.productLine,
+      productScale : this.product.productScale,
+      productVendor : this.product.productVendor,
+      productDescription : this.product.productDescription,
+      quantityInStock : this.product.quantityInStock,
+      buyPrice : this.product.buyPrice,
+      MSRP : this.product.MSRP };
   },
   methods : {
     chgProduct() {
-      let cmsg=confirm(`change ${this.productcode}?`);
+      let cmsg=confirm(`change ${this.product.productCode}?`);
       if (cmsg=== true) {
-        axios.post(`http://localhost:3000/chgproduct/${this.productcode}`, this.product )
+        if (this.product.quantityInStock < 0 ) {
+          this.product.quantityInStock *= -1;
+        }
+        if (this.product.buyPrice < 0 ) {
+          this.product.buyPrice *= -1;
+        }
+        if (this.product.MSRP < 0 ) {
+          this.product.MSRP *= -1;
+        }
+        axios.put(`http://localhost:3000/chgproduct/${this.product.productCode}`, this.product )
         .then ((response) => {
-          // console.log(response);
+          console.log(response);
         })
         .catch(() => {
           // something went wrong?  console.log it?
-        })      
+        })
       }
     },
     delProduct () {
-      let dmsg = confirm(`delete ${this.productcode}?`);
+      let dmsg = confirm(`delete ${this.product.productCode}?`);
       if (dmsg === true) {
-        axios.delete(`http://localhost:3000/delproduct/${this.productcode}`)
+        axios.delete(`http://localhost:3000/delproduct/${this.product.productCode}`)
         .then ((response) => {
           // how do I check the return code here?
-          // console.log(response);
+          console.log(response);
+          location.reload();
         })
         .catch(() => {
           // something went wrong?  console.log it?
@@ -108,8 +116,5 @@ input {
 }
 legend {
   font-weight: bold;
-}
-.qty {
-  text-align: right;
 }
 </style>

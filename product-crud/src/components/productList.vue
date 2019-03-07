@@ -22,7 +22,7 @@
           <td class="qty">{{ item.MSRP.toFixed(2) }}</td>
         </tr>
         <tr v-show="showChgFields">
-          <chgProduct :productcode="item.productCode"/>
+          <chgProduct :product="item" :prodlines="prodlines"/>
         </tr>
       </tbody>
     </table>
@@ -37,6 +37,9 @@ export default {
   name: 'productlist',
   components: {
     chgProduct
+  },
+  props: {
+      prodlines : Array
   },
   data: function () {
     return {
@@ -72,7 +75,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.qty {
-  text-align: right;
-}
+
 </style>
