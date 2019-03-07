@@ -11,6 +11,6 @@
 module.exports = {
   host     : 'localhost',
   user     : 'root',
-  password : 'CoddsRevenge',
+  password : '~your~pw~here~',
   database : 'classicmodels'
 };
