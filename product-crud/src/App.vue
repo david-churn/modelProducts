@@ -1,22 +1,19 @@
 <template>
   <div id="app">
     <h1>Classic Models Products</h1>
-    <addProduct :prodlines="productLines"></addProduct>
-    <productlist :prodlines="productLines"></productlist>
+    <div id="nav">
+      <router-link to="/">Product List</router-link> |
+      <router-link to="/addp">New Product</router-link>
+    </div>
+    <router-view :prodlines="productLines"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import productlist from './components/productList.vue';
-import addProduct from './components/addProduct.vue';
 
 export default {
   name: 'app',
-  components: {
-    productlist,
-    addProduct
-  },
   data: function () {
     return {
       productLines : [],

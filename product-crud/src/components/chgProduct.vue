@@ -35,25 +35,28 @@ import axios from 'axios';
 export default {
   name: 'chgProduct',
   props: {
-    product : Object,
+    inproduct : Object,
     prodlines : Array,
   },
   data: function () {
     return {
       title: `Update Product`,
       originalProduct : { },
+      product: {}
     }
   },
   created() {
     this.originalProduct = {
-      productName : this.product.productName,
-      productLine : this.product.productLine,
-      productScale : this.product.productScale,
-      productVendor : this.product.productVendor,
-      productDescription : this.product.productDescription,
-      quantityInStock : this.product.quantityInStock,
-      buyPrice : this.product.buyPrice,
-      MSRP : this.product.MSRP };
+      productCode : this.inproduct.productCode,
+      productName : this.inproduct.productName,
+      productLine : this.inproduct.productLine,
+      productScale : this.inproduct.productScale,
+      productVendor : this.inproduct.productVendor,
+      productDescription : this.inproduct.productDescription,
+      quantityInStock : this.inproduct.quantityInStock,
+      buyPrice : this.inproduct.buyPrice,
+      MSRP : this.inproduct.MSRP };
+    this.product = this.inproduct;
   },
   methods : {
     chgProduct() {
@@ -93,6 +96,7 @@ export default {
     },
     resetProduct() {
       this.product = {
+        productCode : this.originalProduct.productCode,
         productName : this.originalProduct.productName,
         productLine : this.originalProduct.productLine,
         productScale : this.originalProduct.productScale,

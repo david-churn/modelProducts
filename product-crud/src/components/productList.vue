@@ -1,7 +1,7 @@
 <template>
   <div class="productlist">
     <h2>{{ title }}</h2>
-    <table id="productTab">
+    <table id="inproductab">
       <tr>
         <th></th>
         <th>Code</th>
@@ -22,7 +22,7 @@
           <td class="qty">{{ item.MSRP.toFixed(2) }}</td>
         </tr>
         <tr v-show="showChgFields">
-          <chgProduct :product="item" :prodlines="prodlines"/>
+          <chgProduct :inproduct="item" :prodlines="prodlines"/>
         </tr>
       </tbody>
     </table>

@@ -1,29 +1,26 @@
 <template>
   <div class="addProduct">
-    <h2><button type="button" @click="showAdd">{{ posnegChar }}</button>{{ title }}</h2>
-    <div v-show="showAddFields">
-      <form>
-        <fieldset>
-          <legend>New Product Information</legend>
-          <div>Code: <input v-model="newProduct.productCode"></div>
-          <div>Name: <input v-model="newProduct.productName"></div>
-          <div>Line:
-            <select v-model="newProduct.productLine">
-              <option value="none" selected disabled></option>
-              <option v-for="aline in prodlines" :key="aline.productLine"
-              :v-bind:value="aline.productLine">{{ aline.productLine }}</option>
-            </select>
-          </div>
-          <div>Scale: <input v-model="newProduct.productScale"></div>
-          <div>Vendor: <input v-model="newProduct.productVendor"></div>
-          <div>Description: <textarea v-model="newProduct.productDescription"></textarea></div>
-          <div>In Stock: <input v-model="newProduct.quantityInStock" type="number" class="qty"></div>
-          <div>Purchase price: <input v-model="newProduct.buyPrice" type="number" step=".01" class="qty"></div>
-          <div>MSRP: <input v-model="newProduct.MSRP" type="number" step=".01" class="qty"></div>
-          <div><button type="button" @click="addProduct">Add product</button></div>
-        </fieldset>
-      </form>
-    </div>
+    <form>
+      <fieldset>
+        <legend>New Product Information</legend>
+        <div>Code: <input v-model="newProduct.productCode"></div>
+        <div>Name: <input v-model="newProduct.productName"></div>
+        <div>Line:
+          <select v-model="newProduct.productLine">
+            <option value="none" selected disabled></option>
+            <option v-for="aline in prodlines" :key="aline.productLine"
+            :v-bind:value="aline.productLine">{{ aline.productLine }}</option>
+          </select>
+        </div>
+        <div>Scale: <input v-model="newProduct.productScale"></div>
+        <div>Vendor: <input v-model="newProduct.productVendor"></div>
+        <div>Description: <textarea v-model="newProduct.productDescription"></textarea></div>
+        <div>In Stock: <input v-model="newProduct.quantityInStock" type="number" class="qty"></div>
+        <div>Purchase price: <input v-model="newProduct.buyPrice" type="number" step=".01" class="qty"></div>
+        <div>MSRP: <input v-model="newProduct.MSRP" type="number" step=".01" class="qty"></div>
+        <div><button type="button" @click="addProduct">Add product</button></div>
+      </fieldset>
+    </form>
   </div>
 </template>
 
@@ -38,8 +35,6 @@ export default {
   data: function () {
     return {
       title: `Add Product`,
-      showAddFields: false,
-      posnegChar : '+',
       newProduct : { },
     }
   },
@@ -63,16 +58,6 @@ export default {
       .catch(() => {
         // something went wrong?  console.log it?
       })
-    },
-    showAdd() {
-      // switches this field between true and false.
-      this.showAddFields = !this.showAddFields;
-      if (this.posnegChar === '+') {
-        this.posnegChar='-';
-      }
-      else {
-        this.posnegChar='+';
-      }
     }
   }
 }
@@ -84,6 +69,7 @@ button {
   margin: 0 0.3em;
 }
 form {
+  margin: 1em;
   width: 80%;
 }
 input, option {
