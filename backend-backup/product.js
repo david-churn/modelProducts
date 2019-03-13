@@ -49,7 +49,7 @@ app.get('/product/:id', cors(corsOptions), (request,response) => {
 
 // Add a new product
 app.post ('/addProduct', cors(corsOptions), (request,response) => {
-  let insQuery = `insert into products (productCode, productName, productLine, productScale, productVendor, productDescription, quantityInStock, buyPrice, MSRP) values ('${request.body.productCode}','${request.body.productName}','${request.body.productLine}','${request.body.productScale}','${request.body.productVendor}','${request.body.productDescription}',${request.body.quantityInStock},${request.body.buyPrice},${request.body.MSRP})`;
+  let insQuery = `insert into products (productCode, productName, productLine, productScale, productVendor, productDescription, quantityInStock, buyPrice, MSRP) values (${request.body.productCode},${request.body.productName},${request.body.productLine},${request.body.productScale},${request.body.productVendor},${request.body.productDescription},${request.body.quantityInStock},${request.body.buyPrice},${request.body.MSRP})`;
   console.log(`insQuery=`, insQuery);
   connection.query(insQuery,
     function (error, results, fields) {
